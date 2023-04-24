@@ -13,58 +13,96 @@
 get_args <- function() {
 
     ui <- miniUI::miniPage(
-        miniUI::miniContentPanel(
-            shiny::fillRow(flex = c(4,2),
-                    shiny::textInput(
-                        inputId = "title",
-                        label = "Title, max. 40 character",
-                        placeholder = "Name of your blog post",
-                        width = "100%"
-                        ),
-                    shiny::textInput(
-                        inputId = "author",
-                        label = "Author",
-                        value = getOption("quartopost.author"),
-                        placeholder = "Name of your blog post",
-                        ),
-                    height = "70px"
-                ),
-            shiny::fillRow(shiny::textInput(
-                inputId = "subtitle",
-                label = "Subtitle",
-                placeholder = "subtitle (optional)",
-                width = "100%"
-                ),
-                height = "70px"
+        # change CSS for hr:
+        # https://stackoverflow.com/questions/43592163/horizontal-rule-hr-in-r-shiny-sidebar
+        htmltools::tags$head(
+            htmltools::tags$style(htmltools::HTML("hr {border-top: 1px solid #000000;}"))
+        ),
+        miniUI::miniTabstripPanel(
+            miniUI::miniTabPanel("Essentials", icon = shiny::icon("sliders"),
+                                 miniUI::miniContentPanel(
+                                     shiny::fillRow(flex = c(7,4,3),
+                                                    shiny::textInput(
+                                                        inputId = "title",
+                                                        label = "Title, max. 40 character",
+                                                        placeholder = "Name of your blog post",
+                                                    ),
+                                                    shiny::textInput(
+                                                        inputId = "author",
+                                                        label = "Author",
+                                                        value = getOption("quartopost.author"),
+                                                        placeholder = "Name of your blog post",
+                                                    ),
+                                                    shiny::fillRow(shiny::dateInput(
+                                                        inputId = "date",
+                                                        label = "Date",
+                                                        value = lubridate::today(),
+                                                    ),
+                                                    ),
+                                                    height = "70px"
+                                     ),
+                                     shiny::fillRow(shiny::textInput(
+                                         inputId = "subtitle",
+                                         label = "Subtitle",
+                                         placeholder = "subtitle (optional)",
+                                         width = "100%"
+                                     ),
+                                     ),
+
+                                 ),
             ),
-            shiny::fillRow(shiny::textAreaInput(
-                inputId = "description",
-                label = "Description",
-                placeholder = "Write optional a short description, about one paragraph",
-                width = "100%"
-                ),
-                height = "100px"
+            miniUI::miniTabPanel("Categories", icon = shiny::icon("area-chart"),
+                                 miniUI::miniContentPanel(
+                                     shiny::fillRow(shiny::selectInput(
+                                         inputId = "categories",
+                                         label = "Categories",
+                                         choices = c("Item1", "Item2", "Item3", "another Item"),
+                                         multiple = TRUE,
+                                         width = "100%"
+                                        ),
+                                    ),
+                                ),
             ),
-            shiny::fillRow(
-                shiny::fileInput('newimg', 'Image', placeholder = 'Select external image'),
-                shiny::column(width = 6, offset = 2, shiny::uiOutput('overbutton')),
-                height = '90px'
+
+            # shiny::fillRow(htmltools::hr(), height = '50px'),
+            miniUI::miniTabPanel("Image", icon = shiny::icon("area-chart"),
+                                 miniUI::miniContentPanel(
+                                     shiny::fillRow(
+                                         shiny::fileInput('newimg', 'Image', placeholder = 'Select external image'),
+                                         shiny::column(width = 6, offset = 2, shiny::uiOutput('overbutton')),
+                                         height = '70px'
+                                     ),
+                                     # shiny::fillRow(
+                                     #     shiny::textInput('w', 'Width', '', "50%", '(optional) e.g., 400px or"80%'),
+                                     #     shiny::textInput('h', 'Height', '', "50%", '(optional) e.g., 200px'),
+                                     #     height = '70px'
+                                     # ),
+                                     shiny::fillRow(
+                                         shiny::textInput('alt', 'Alternative text', '', "100%", '(optional but recommended) e.g., awesome screenshot'),
+                                         height = '70px'
+                                     ),
+                                     shiny::fillRow(
+                                         shiny::textInput('target', 'Target file path', '', "100%", '(optional) customize if necessary'),
+                                         height = '70px'
+                                     ),
+                                 ),
             ),
-            shiny::fillRow(
-                shiny::textInput('w', 'Width', '', "50%", '(optional) e.g., 400px or"80%'),
-                shiny::textInput('h', 'Height', '', "50%", '(optional) e.g., 200px'),
-                height = '70px'
-            ),
-            shiny::fillRow(
-                shiny::textInput('alt', 'Alternative text', '', "100%", '(optional but recommended) e.g., awesome screenshot'),
-                height = '70px'
-            ),
-            shiny::fillRow(
-                shiny::textInput('target', 'Target file path', '', "100%", '(optional) customize if necessary'),
-                height = '70px'
+
+
+            miniUI::miniTabPanel("Description", icon = shiny::icon("table"),
+                                 miniUI::miniContentPanel(
+                                     shiny::fillRow(shiny::textAreaInput(
+                                         inputId = "description",
+                                         label = "Description",
+                                         placeholder = "Write (optional) a short description, about one paragraph",
+                                         width = "100%",
+                                         rows = 8
+                                     ),
+                                     height = "70px"
+                                     )
+                                 )
             )
         ),
-
         miniUI::gadgetTitleBar("Enter the YAML fields for your post")
     )
 
@@ -87,6 +125,6 @@ get_args <- function() {
     }
 
     shiny::runGadget(ui, server, viewer =
-         shiny::dialogViewer("Search Hypothes.is notes", width = 600, height = 600)
+         shiny::dialogViewer("Search Hypothes.is notes", width = 650, height = 350)
     )
 }
