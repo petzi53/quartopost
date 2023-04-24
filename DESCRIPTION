@@ -1,13 +1,20 @@
 Package: quartopost
-Title: What the Package Does (One Line, Title Case)
+Title: Create A Quarto Blog Post
 Version: 0.0.0.9000
 Authors@R: 
     person("Peter", "Baumgartner", , "petzi53@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4526-8791"))
-Description: What the package does (one paragraph).
+Description: After displaying a dialog window where you can enter
+  data for the YAM header it generates the core skeleton of a 
+  Quarto post.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 URL: https://github.com/petzi53/quartopost
 BugReports: https://github.com/petzi53/quartopost/issues
+Imports: 
+    htmltools,
+    lubridate,
+    miniUI,
+    shiny
