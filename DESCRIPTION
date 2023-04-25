@@ -14,7 +14,12 @@ RoxygenNote: 7.2.3
 URL: https://github.com/petzi53/quartopost
 BugReports: https://github.com/petzi53/quartopost/issues
 Imports: 
+    fs,
+    glue,
     htmltools,
     lubridate,
     miniUI,
-    shiny
+    rstudioapi,
+    shiny,
+    stringi,
+    stringr

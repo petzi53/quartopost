@@ -1,15 +1,66 @@
-#' create a new quarto blog post
-#'
-#' Sets up the directory for a new blog post.
-#' Note this function was modified from the one originally supplied
-#' by [Tom Mock](https://themockup.blog/posts/2022-11-08-use-r-to-generate-a-quarto-blogpost/).
-#'
-#' Title
-#'
-#' @return
-#' @export
-#'
-#' @examples
+# convert to latin-ascii (first line) and then
+# convert to kebab case and
+# remove non space or alphanumeric characters
+title_kebab <-  function(title) {
+    # https://stackoverflow.com/a/38171652/7322615
+    stringi::stri_trans_general((title), "latin-ascii") |>
+    stringr::str_to_lower() |>
+    stringr::str_remove_all("[^[:alnum:][:space:]]") |>
+    stringr::str_replace_all(" ", "-")
+}
+
+
+# wrap description at 77 characters (are URLs allowed?)
+long_yaml_text <- function(txt) {
+    stringr::str_wrap(txt, width = 77) |>
+    stringr::str_replace_all("[\n]", "\n  ")
+    }
+
+
+#################################################################
+qp <-  function() {
+    params <- get_args()
+
+    slug <- paste0("posts/", params$date, "-",
+                        title_kebab(params$title)
+                )
+
+    new_post_file <- paste0(slug, '/', "index.qmd")
+    description <- long_yaml_text(params$description)
+
+
+    # build YAML
+    post_yaml <- c(
+        "---",
+        glue::glue('title: "{params$title}"'),
+#        "subtitle:  |",
+        glue::glue('subtitle: "{params$subtitle}"'),
+        "description: |",
+        glue::glue('  {description}'),
+        glue::glue('author: "{params$author}"'),
+        glue::glue('date: "{params$date}"'),
+        "---\n"
+        )
+    paste(post_yaml, collapse = "\n")
+
+    # create directory
+    fs::dir_create(
+        path = slug
+    )
+
+    # create file
+    fs::file_create(new_post_file)
+    writeLines(
+        text = post_yaml,
+        con = new_post_file
+    )
+
+    rstudioapi::documentOpen(new_post_file, line = (length(post_yaml) + 1))
+    invisible()
+}
+
+
+#################################################################
 get_args <- function() {
 
     ui <- miniUI::miniPage(
@@ -94,7 +145,7 @@ get_args <- function() {
                                      shiny::fillRow(shiny::textAreaInput(
                                          inputId = "description",
                                          label = "Description",
-                                         placeholder = "Write (optional) a short description, about one paragraph",
+                                         placeholder = "Write (optional) a short description, summary or introductory paragraph. Markdown is allowed.",
                                          width = "100%",
                                          rows = 8
                                      ),
@@ -116,9 +167,9 @@ get_args <- function() {
 
         # When the Done button is clicked, return a value
         shiny::observeEvent(input$done, {
-            returnValue <- list(input$title, input$author,
+            returnValue <- list(input$title, input$author, input$date,
                                 input$subtitle, input$description)
-            names(returnValue) <- c("title", "author",
+            names(returnValue) <- c("title", "author", "date",
                                     "subtitle", "description")
             shiny::stopApp(returnValue)
         })
@@ -128,3 +179,4 @@ get_args <- function() {
          shiny::dialogViewer("Search Hypothes.is notes", width = 650, height = 350)
     )
 }
+
