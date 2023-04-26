@@ -16,7 +16,6 @@ BugReports: https://github.com/petzi53/quartopost/issues
 Imports: 
     fs,
     glue,
-    htmltools,
     lubridate,
     miniUI,
     rstudioapi,
