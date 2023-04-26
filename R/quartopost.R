@@ -33,12 +33,14 @@ qp <-  function() {
     post_yaml <- c(
         "---",
         glue::glue('title: "{params$title}"'),
-#        "subtitle:  |",
         glue::glue('subtitle: "{params$subtitle}"'),
         "description: |",
         glue::glue('  {description}'),
         glue::glue('author: "{params$author}"'),
         glue::glue('date: "{params$date}"'),
+        # date-modified starts always with date choice
+        glue::glue('date-modified: "{params$date}"'),
+        glue::glue('draft: true'),
         "---\n"
         )
     paste(post_yaml, collapse = "\n")
@@ -64,11 +66,6 @@ qp <-  function() {
 get_args <- function() {
 
     ui <- miniUI::miniPage(
-        # change CSS for hr:
-        # https://stackoverflow.com/questions/43592163/horizontal-rule-hr-in-r-shiny-sidebar
-        htmltools::tags$head(
-            htmltools::tags$style(htmltools::HTML("hr {border-top: 1px solid #000000;}"))
-        ),
         miniUI::miniTabstripPanel(
             miniUI::miniTabPanel("Essentials", icon = shiny::icon("sliders"),
                                  miniUI::miniContentPanel(
@@ -98,7 +95,18 @@ get_args <- function() {
                                          placeholder = "subtitle (optional)",
                                          width = "100%"
                                      ),
+                                     height = "70px"
                                      ),
+
+                                     # shiny::fillRow(shiny::checkboxGroupInput(
+                                     #     inputId = "misc",
+                                     #     label = "Add following YAML fields:",
+                                     #     choices = c("date-modified",
+                                     #                 "draft"),
+                                     #     inline = TRUE
+                                     # ),
+                                     # height = "70px"
+                                     # ),
 
                                  ),
             ),
@@ -168,8 +176,9 @@ get_args <- function() {
         # When the Done button is clicked, return a value
         shiny::observeEvent(input$done, {
             returnValue <- list(input$title, input$author, input$date,
+                                input$misc,
                                 input$subtitle, input$description)
-            names(returnValue) <- c("title", "author", "date",
+            names(returnValue) <- c("title", "author", "date", "misc",
                                     "subtitle", "description")
             shiny::stopApp(returnValue)
         })
