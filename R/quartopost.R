@@ -21,12 +21,24 @@ long_yaml_text <- function(txt) {
 qp <-  function() {
     params <- get_args()
 
+    try(if (params$title == "") {
+        stop("A blog post must have a title")
+    } else {
+
     slug <- paste0("posts/", params$date, "-",
                         title_kebab(params$title)
                 )
 
+
     new_post_file <- paste0(slug, '/', "index.qmd")
-    description <- long_yaml_text(params$description)
+
+    if (params$description != "") {
+        description <-
+            paste0("description:  |\n  ",
+            long_yaml_text(params$description))
+    } else {
+        description <- 'description: ""'
+    }
 
 
     # build YAML
@@ -34,8 +46,7 @@ qp <-  function() {
         "---",
         glue::glue('title: "{params$title}"'),
         glue::glue('subtitle: "{params$subtitle}"'),
-        "description: |",
-        glue::glue('  {description}'),
+        glue::glue('{description}'),
         glue::glue('author: "{params$author}"'),
         glue::glue('date: "{params$date}"'),
         # date-modified starts always with date choice
@@ -59,6 +70,7 @@ qp <-  function() {
 
     rstudioapi::documentOpen(new_post_file, line = (length(post_yaml) + 1))
     invisible()
+    }) # end of else branch of try
 }
 
 
@@ -185,7 +197,7 @@ get_args <- function() {
     }
 
     shiny::runGadget(ui, server, viewer =
-         shiny::dialogViewer("Search Hypothes.is notes", width = 650, height = 350)
+         shiny::dialogViewer("Quarto Blog Post Fields", width = 650, height = 350)
     )
 }
 
