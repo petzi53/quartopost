@@ -17,6 +17,20 @@ long_yaml_text <- function(txt) {
     }
 
 
+# formatting for long or empty description
+prepare_description <- function(txt) {
+    ifelse(txt != "",
+        paste0("description:  |\n  ", long_yaml_text(txt)),
+        'description: ""')
+}
+
+# check if an image is provided
+prepare_image_name <-  function(txt) {
+    ifelse(is.null(txt), "", txt$name)
+}
+
+
+
 #################################################################
 qp <-  function() {
     params <- get_args()
@@ -30,19 +44,9 @@ qp <-  function() {
     stopifnot("File name already exists!" =
          !file.exists(new_post_file))
 
-    if (params$description != "") {
-        description <-
-            paste0("description:  |\n  ",
-            long_yaml_text(params$description))
-    } else {
-        description <- 'description: ""'
-    }
+    description <- prepare_description(params$description)
+    image_name <- prepare_image_name(params$image)
 
-    if (is.null(params$image)) {
-        image_name = ""
-    } else {
-        image_name = params$image$name
-    }
 
     # build YAML
     post_yaml <- c(
