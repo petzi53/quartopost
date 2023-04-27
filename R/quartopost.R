@@ -31,7 +31,6 @@ qp <-  function() {
 
     new_post_file <- paste0(slug, '/', "index.qmd")
 
-
     try(if (file.exists(new_post_file)) {
         stop("A blog post with the same file name already exists")
     } else {
@@ -45,6 +44,11 @@ qp <-  function() {
         description <- 'description: ""'
     }
 
+    if (is.null(params$image)) {
+        image_name = ""
+    } else {
+        image_name = params$image$name
+    }
 
     # build YAML
     post_yaml <- c(
@@ -54,6 +58,8 @@ qp <-  function() {
         glue::glue('{description}'),
         glue::glue('author: "{params$author}"'),
         glue::glue('date: "{params$date}"'),
+        glue::glue('image: "{image_name}"'),
+        glue::glue('image-alt: "{params$alt}"'),
         # date-modified starts always with date choice
         glue::glue('date-modified: "{params$date}"'),
         glue::glue('draft: true'),
@@ -73,6 +79,12 @@ qp <-  function() {
         con = new_post_file
     )
 
+    # copy image
+    if (!is.null(params$image)) {
+        fs::file_copy(params$image$datapath,
+                      paste0(slug, '/', params$image$name))
+    }
+
     rstudioapi::documentOpen(new_post_file, line = (length(post_yaml) + 1))
     invisible()
     }) # end of try file exists
@@ -90,7 +102,7 @@ get_args <- function() {
                                      shiny::fillRow(flex = c(7,4,3),
                                                     shiny::textInput(
                                                         inputId = "title",
-                                                        label = "Title, max. 40 character",
+                                                        label = "Title (try to be under 40 characters)",
                                                         placeholder = "Name of your blog post",
                                                     ),
                                                     shiny::textInput(
@@ -145,7 +157,8 @@ get_args <- function() {
             miniUI::miniTabPanel("Image", icon = shiny::icon("area-chart"),
                                  miniUI::miniContentPanel(
                                      shiny::fillRow(
-                                         shiny::fileInput('newimg', 'Image', placeholder = 'Select external image'),
+                                         shiny::fileInput('newimg', 'Image', placeholder = 'Select external image',
+                                                          accept="image/*"),
                                          shiny::column(width = 6, offset = 2, shiny::uiOutput('overbutton')),
                                          height = '70px'
                                      ),
@@ -155,13 +168,13 @@ get_args <- function() {
                                      #     height = '70px'
                                      # ),
                                      shiny::fillRow(
-                                         shiny::textInput('alt', 'Alternative text', '', "100%", '(optional but recommended) e.g., awesome screenshot'),
+                                         shiny::textInput('alt', 'Alternative text', '', "100%", 'Replacement text when image is not available'),
                                          height = '70px'
                                      ),
-                                     shiny::fillRow(
-                                         shiny::textInput('target', 'Target file path', '', "100%", '(optional) customize if necessary'),
-                                         height = '70px'
-                                     ),
+                                     # shiny::fillRow(
+                                     #     shiny::textInput('target', 'Target file path', '', "100%", '(optional) customize if necessary'),
+                                     #     height = '70px'
+                                     # ),
                                  ),
             ),
 
@@ -194,9 +207,10 @@ get_args <- function() {
         # When the Done button is clicked, return a value
         shiny::observeEvent(input$done, {
             returnValue <- list(input$title, input$author, input$date,
-                                input$misc,
+                                input$newimg, input$alt,
                                 input$subtitle, input$description)
-            names(returnValue) <- c("title", "author", "date", "misc",
+            names(returnValue) <- c("title", "author", "date",
+                                    "image", "alt",
                                     "subtitle", "description")
             shiny::stopApp(returnValue)
         })
