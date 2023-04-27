@@ -57,7 +57,6 @@ qp <-  function() {
     slug <- paste0("posts/", params$date, "-",
             title_kebab(params$title) )
     new_post_file <- paste0(slug, '/', "index.qmd")
-
     stopifnot("File name already exists!" =
          !file.exists(new_post_file))
 
@@ -66,12 +65,8 @@ qp <-  function() {
     post_yaml <- prepare_yaml(params, description, image_name)
 
 
-    # create directory
-    fs::dir_create(
-        path = slug
-    )
-
-    # create file
+    # create directory and file
+    fs::dir_create(path = slug)
     fs::file_create(new_post_file)
     writeLines(
         text = post_yaml,
@@ -84,8 +79,9 @@ qp <-  function() {
                       paste0(slug, '/', params$image$name))
     }
 
-    rstudioapi::documentOpen(new_post_file, line = (length(post_yaml) + 1))
-    invisible()
+    rstudioapi::documentOpen(new_post_file,
+                             line = (length(post_yaml) + 1))
+    invisible() # prevent console output
 }
 
 
