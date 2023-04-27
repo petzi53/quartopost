@@ -30,7 +30,24 @@ prepare_image_name <-  function(txt) {
 }
 
 
-
+# build YAML
+prepare_yaml <-  function(args, desc, img_name) {
+    paste(c(
+        "---",
+        glue::glue('title: "{args$title}"'),
+        glue::glue('subtitle: "{args$subtitle}"'),
+        glue::glue('{desc}'),
+        glue::glue('author: "{args$author}"'),
+        glue::glue('date: "{args$date}"'),
+        glue::glue('image: "{img_name}"'),
+        glue::glue('image-alt: "{args$alt}"'),
+        # date-modified starts always with date choice
+        glue::glue('date-modified: "{args$date}"'),
+        glue::glue('draft: true'),
+        "---\n"
+        ), collapse = "\n"
+    )
+}
 #################################################################
 qp <-  function() {
     params <- get_args()
@@ -46,24 +63,8 @@ qp <-  function() {
 
     description <- prepare_description(params$description)
     image_name <- prepare_image_name(params$image)
+    post_yaml <- prepare_yaml(params, description, image_name)
 
-
-    # build YAML
-    post_yaml <- c(
-        "---",
-        glue::glue('title: "{params$title}"'),
-        glue::glue('subtitle: "{params$subtitle}"'),
-        glue::glue('{description}'),
-        glue::glue('author: "{params$author}"'),
-        glue::glue('date: "{params$date}"'),
-        glue::glue('image: "{image_name}"'),
-        glue::glue('image-alt: "{params$alt}"'),
-        # date-modified starts always with date choice
-        glue::glue('date-modified: "{params$date}"'),
-        glue::glue('draft: true'),
-        "---\n"
-        )
-    paste(post_yaml, collapse = "\n")
 
     # create directory
     fs::dir_create(
