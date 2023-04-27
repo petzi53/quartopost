@@ -29,8 +29,13 @@ qp <-  function() {
                         title_kebab(params$title)
                 )
 
-
     new_post_file <- paste0(slug, '/', "index.qmd")
+
+
+    try(if (file.exists(new_post_file)) {
+        stop("A blog post with the same file name already exists")
+    } else {
+
 
     if (params$description != "") {
         description <-
@@ -70,7 +75,8 @@ qp <-  function() {
 
     rstudioapi::documentOpen(new_post_file, line = (length(post_yaml) + 1))
     invisible()
-    }) # end of else branch of try
+    }) # end of try file exists
+    }) # end of try empty title
 }
 
 
