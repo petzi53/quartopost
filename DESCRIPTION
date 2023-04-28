@@ -16,8 +16,10 @@ BugReports: https://github.com/petzi53/quartopost/issues
 Imports: 
     fs,
     glue,
+    here,
     lubridate,
     miniUI,
+    readr,
     rstudioapi,
     shiny,
     stringi,

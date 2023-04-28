@@ -29,9 +29,15 @@ prepare_image_name <-  function(txt) {
     ifelse(is.null(txt), "", txt$name)
 }
 
+# flatten categories vector
+prepare_categories <-  function(cat, new) {
+    cat <- stringr::str_sort(c(cat, new)) |>
+        stringr::str_flatten(collapse = ", ")
+}
+
 
 # build YAML
-prepare_yaml <-  function(args, desc, img_name) {
+prepare_yaml <-  function(args, desc, img_name, cats) {
     paste(c(
         "---",
         glue::glue('title: "{args$title}"'),
@@ -41,6 +47,7 @@ prepare_yaml <-  function(args, desc, img_name) {
         glue::glue('date: "{args$date}"'),
         glue::glue('image: "{img_name}"'),
         glue::glue('image-alt: "{args$alt}"'),
+        glue::glue('categories: [{cats}]'),
         # date-modified starts always with date choice
         glue::glue('date-modified: "{args$date}"'),
         glue::glue('draft: true'),
@@ -48,8 +55,62 @@ prepare_yaml <-  function(args, desc, img_name) {
         ), collapse = "\n"
     )
 }
+
+# extract categories form yaml with square brackets
+# look for "categories:" AND followed by zero or more white-space characters AND
+# "[" AND followed by zero or more character class of white-space and nonwhite characters AND
+# finally followed by the closing bracket "]"
+extract_cat_brackets <- function(f) {
+    stringr::str_extract(f, "categories:\\s*\\[[\\s\\S]*\\]") |>
+    stringr::str_remove("categories:\\s*\\[") |>
+    stringr::str_remove("\\]") |>
+    stringr::str_split_1(",") |>
+    stringr::str_remove_all('\"') |>
+    stringr::str_trim()
+}
+
+# extract categories from yaml with dashed
+extract_cat_dashes <-  function(f) {
+    stringr::str_remove(f, '^[\\s\\S]*categories:\\s') |>
+    stringr::str_remove('\\n[:alpha:].*\\n(.*)\\n---') |>
+    stringr::str_split_1('\\n\\s*-') |>
+    stringr::str_remove_all('\"') |>
+    stringr::str_trim() |>
+    stringi::stri_omit_empty('')
+}
+
+
+# collect categories
+get_cat <- function() {
+    f_list = list()
+    cat_vec = NULL
+
+
+    # find all "*.qmd" files under folder "posts"
+    fp <- fs::dir_ls(path = here::here("posts"), recurse = TRUE, glob = "*.qmd")
+
+    # read file contents into list variable
+    for (i in 1:length(fp)) {
+        f_list[i] <- readr::read_file(fp[i]) |>
+            stringr::str_extract(stringr::regex("^---[\\s\\S]*^---", multiline = TRUE))
+    }
+
+    # extract yaml content
+    for (i in 1:length(f_list)) {
+        if (stringr::str_detect(f_list[[i]], "categories:")) {
+            if (stringr::str_detect(f_list[[i]], "categories:\\s*\\[")) { # bracket notation
+                cat_vec <- c(cat_vec, extract_cat_brackets(f_list[[i]]))
+            } else {
+                cat_vec <- c(cat_vec, extract_cat_dashes(f_list[[i]]))
+            }
+        }
+    }
+    return(unique(cat_vec))
+}
+
 #################################################################
 qp <-  function() {
+
     params <- get_args()
 
     stopifnot("Your blog post has no title!" =
@@ -62,7 +123,8 @@ qp <-  function() {
 
     description <- prepare_description(params$description)
     image_name <- prepare_image_name(params$image)
-    post_yaml <- prepare_yaml(params, description, image_name)
+    cats <- prepare_categories(params$categories, params$newcat)
+    post_yaml <- prepare_yaml(params, description, image_name, cats)
 
 
     # create directory and file
@@ -118,7 +180,6 @@ get_args <- function() {
                          placeholder = "subtitle (optional)",
                          width = "100%"
                      ),
-                     height = "70px"
                      ),
                  ),
             ),
@@ -127,10 +188,20 @@ get_args <- function() {
                      shiny::fillRow(shiny::selectInput(
                          inputId = "categories",
                          label = "Categories",
-                         choices = c("Item1", "Item2", "Item3", "another Item"),
+                         choices = c("Choose one of the categories already used" = "",
+                                     stringr::str_sort(get_cat())),
                          multiple = TRUE,
                          width = "100%"
                         ),
+                        height = "100px"
+                    ),
+                    shiny::fillRow(shiny::textInput(
+                        inputId = "newcat",
+                        label = "Create a new categorie",
+                        placeholder = "Add new categories separated with a comma",
+                        width = "100%"
+                    ),
+                    height = "70px"
                     ),
                 ),
             ),
@@ -139,7 +210,7 @@ get_args <- function() {
                  miniUI::miniContentPanel(
                      shiny::fillRow(
                          shiny::fileInput('newimg', 'Image', placeholder =
-                              'Select external image', accept="image/*"),
+                              'Select external image', accept = "image/*"),
                          shiny::column(width = 6, offset = 2, shiny::uiOutput('overbutton')),
                          height = '70px'
                      ),
@@ -176,9 +247,11 @@ get_args <- function() {
         shiny::observeEvent(input$done, {
             returnValue <- list(input$title, input$author,
                 input$date, input$newimg, input$alt,
-                input$subtitle, input$description)
+                input$subtitle, input$description,
+                input$categories, input$newcat)
             names(returnValue) <- c("title", "author", "date",
-                "image", "alt", "subtitle", "description")
+                "image", "alt", "subtitle", "description",
+                "categories", "newcat")
             shiny::stopApp(returnValue)
         })
     }
