@@ -7,7 +7,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "50%"
 )
 ```
 
@@ -21,7 +21,7 @@ The goal of `quartopost` is to create and open a Quarto blog post in RStudio.
 
 `quartopost()` displays a dialog window where you can enter the data for the YAML header of a new blog post. 
 
-```{r}
+```{r screenshot}
 knitr::include_graphics("man/figures/README-/shiny-dialog-window.png")
 ```
 
@@ -38,7 +38,7 @@ You can choose from your categories already created or add new categories. With 
 
 You can install the development version of `quartopost` from [GitHub](https://github.com/) with:
 
-```{r eval=FALSE}
+```{r installation, eval=FALSE}
 # install.packages("devtools")
 devtools::install_github("petzi53/quartopost")
 ```

@@ -14,7 +14,7 @@ the YAML header of a new blog post.
 knitr::include_graphics("man/figures/README-/shiny-dialog-window.png")
 ```
 
-<img src="man/figures/README-/shiny-dialog-window.png" width="100%" />
+<img src="man/figures/README-/shiny-dialog-window.png" width="50%" />
 
 After clicking the “Done” button the function generates the core
 skeleton of a Quarto post. This includes:
