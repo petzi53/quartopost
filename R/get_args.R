@@ -47,7 +47,7 @@ get_args <- function() {
                     ),
                     shiny::fillRow(shiny::textInput(
                         inputId = "newcat",
-                        label = "Create a new categorie",
+                        label = "Create a new category",
                         placeholder = "Add new categories separated with a comma",
                         width = "100%"
                     ),
