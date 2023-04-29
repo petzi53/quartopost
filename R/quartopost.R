@@ -164,7 +164,7 @@ get_args <- function() {
                             inputId = "author",
                             label = "Author",
                             value = getOption("quartopost.author"),
-                            placeholder = "Name of your blog post",
+                            placeholder = "Author of this post",
                         ),
                         shiny::fillRow(shiny::dateInput(
                             inputId = "date",
