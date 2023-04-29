@@ -9,12 +9,14 @@ RStudio.
 
 `quartopost()` displays a dialog window where you can enter the data for
 the YAML header of a new blog post. After clicking the “Done” button the
-function generates the core skeleton of a Quarto post. This includes: -
-creating the directory (named with the date and title in kebab
-notation) - (optionally) copying images from your hard disk into this
-new folder - creating the `index.qmd` file with the YAML header
-populated from the data of the dialog window - opening the blog post
-file in RStudio for editing.
+function generates the core skeleton of a Quarto post. This includes:
+
+- creating the directory (named with the date and title in kebab
+  notation)
+- (optionally) copying images from your hard disk into this new folder
+- creating the `index.qmd` file with the YAML header populated from the
+  data of the dialog window
+- opening the blog post file in RStudio for editing.
 
 You can choose from your categories already created or add new
 categories. With the package comes also an RStudio Addin so you can bind
