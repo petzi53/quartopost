@@ -2,8 +2,6 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -19,22 +17,31 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of `quartopost` is to create a Quarto blog post. It displays a dialog where you can enter data for the YAM header. Then it generates the core skeleton of a Quarto post, including the directory, the `index.qmd` and writes out the YAML header. 
+The goal of `quartopost` is to create and open a Quarto blog post in RStudio. 
+
+`quartopost()` displays a dialog window where you can enter the data for the YAML header of a new blog post. 
+After clicking the "Done" button the function generates the core skeleton of a Quarto post. This includes: 
+- creating the directory (named with the date and title in kebab notation) 
+- (optionally) copying images from your hard disk into this new folder
+- creating the `index.qmd` file with the YAML header populated from the data of the dialog window
+- opening the blog post file in RStudio for editing.
+
+You can choose from your categories already created or add new categories. With the package comes also an RStudio Addin so you can bind the `quartopost()` with a shortcut.
 
 ## Installation
 
-You can install the development version of quartopost from [GitHub](https://github.com/) with:
+You can install the development version of `quartopost` from [GitHub](https://github.com/) with:
 
-``` r
+```{r}
 # install.packages("devtools")
 devtools::install_github("petzi53/quartopost")
 ```
 
+
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
 ```{r example}
-## library(quartopost)
-## basic example code
+library(quartopost)
+
+if (interactive()) quartopost()
 ```
