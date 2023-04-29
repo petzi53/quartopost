@@ -21,7 +21,7 @@ The goal of `quartopost` is to create and open a Quarto blog post in RStudio.
 
 `quartopost()` displays a dialog window where you can enter the data for the YAML header of a new blog post. 
 
-```{r screenshot}
+```{r screenshot, fig.align='center', echo=FALSE, fig.cap='Dialog window for creating a blog post', fig.alt='Dialog windows shows input field for title, author, date and subtitle'}
 knitr::include_graphics("man/figures/README-/shiny-dialog-window.png")
 ```
 

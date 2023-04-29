@@ -10,11 +10,14 @@ RStudio.
 `quartopost()` displays a dialog window where you can enter the data for
 the YAML header of a new blog post.
 
-``` r
-knitr::include_graphics("man/figures/README-/shiny-dialog-window.png")
-```
+<div class="figure" style="text-align: center">
 
-<img src="man/figures/README-/shiny-dialog-window.png" width="50%" />
+<img src="man/figures/README-/shiny-dialog-window.png" alt="Dialog windows shows input field for title, author, date and subtitle" width="50%" />
+<p class="caption">
+Dialog window for creating a blog post
+</p>
+
+</div>
 
 After clicking the “Done” button the function generates the core
 skeleton of a Quarto post. This includes:
