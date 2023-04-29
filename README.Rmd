@@ -32,7 +32,7 @@ You can choose from your categories already created or add new categories. With 
 
 You can install the development version of `quartopost` from [GitHub](https://github.com/) with:
 
-```{r}
+```{r eval=FALSE}
 # install.packages("devtools")
 devtools::install_github("petzi53/quartopost")
 ```
