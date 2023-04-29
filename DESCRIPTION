@@ -17,6 +17,7 @@ Imports:
     fs,
     glue,
     here,
+    knitr,
     lubridate,
     miniUI,
     readr,

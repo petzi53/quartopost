@@ -20,6 +20,11 @@ knitr::opts_chunk$set(
 The goal of `quartopost` is to create and open a Quarto blog post in RStudio. 
 
 `quartopost()` displays a dialog window where you can enter the data for the YAML header of a new blog post. 
+
+```{r}
+knitr::include_graphics("man/figures/README-/shiny-dialog-window.png")
+```
+
 After clicking the "Done" button the function generates the core skeleton of a Quarto post. This includes: 
 
 - creating the directory (named with the date and title in kebab notation) 
