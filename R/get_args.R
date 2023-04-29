@@ -41,7 +41,7 @@ get_args <- function() {
                          choices = c("Choose one of the categories already used" = "",
                                      stringr::str_sort(get_cat())),
                          multiple = TRUE,
-                         width = "100%"
+                         width = "70%"
                         ),
                         height = "100px"
                     ),
