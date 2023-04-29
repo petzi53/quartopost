@@ -1,5 +1,5 @@
 Name: Create Quarto Post
 Description: Dialog to fill in YAML fiels for a new Quarto post
-Binding: qp
+Binding: quartopost
 Interactive: true
 
