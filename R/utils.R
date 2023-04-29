@@ -31,6 +31,12 @@ prepare_image_name <-  function(txt) {
 
 # flatten categories vector
 prepare_categories <-  function(cat, new) {
+    # added incorrectly a comma at the end of new categories?
+    stringr::str_trim(new)
+    if (stringr::str_ends(new, ',')) {
+        new <- stringr::str_sub(new, end = -2L)
+    }
+
     cat <- stringr::str_sort(c(cat, new)) |>
         stringr::str_flatten(collapse = ", ")
 }
@@ -85,9 +91,15 @@ get_cat <- function() {
     f_list = list()
     cat_vec = NULL
 
+    # create "posts" folder if it does not exist
+    if (!fs::dir_exists(path = here::here("posts"))) {
+        fs::dir_create(path = here::here("posts"))
+    }
 
     # find all "*.qmd" files under folder "posts"
     fp <- fs::dir_ls(path = here::here("posts"), recurse = TRUE, glob = "*.qmd")
+    # check if there are already files inside the folder "posts"
+    if (length(fp) == 0) {return(NULL)}
 
     # read file contents into list variable
     for (i in 1:length(fp)) {
