@@ -31,6 +31,7 @@ prepare_image_name <-  function(txt) {
 
 # flatten categories vector
 prepare_categories <-  function(cat, new) {
+    if (new == "") {new = NULL}
     cat <- stringr::str_sort(c(cat, new)) |>
         stringr::str_flatten(collapse = ", ")
 }
