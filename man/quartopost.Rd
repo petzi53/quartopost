@@ -2,7 +2,7 @@
 % Please edit documentation in R/quartopost.R
 \name{quartopost}
 \alias{quartopost}
-\title{Create a new post}
+\title{Create a new quarto blog post}
 \usage{
 quartopost()
 }
@@ -21,5 +21,7 @@ Nothing. What matters are the side effects:
 desired data to create the file for the blog post.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 quartopost()
+\dontshow{\}) # examplesIf}
 }

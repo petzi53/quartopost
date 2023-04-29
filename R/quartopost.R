@@ -1,4 +1,4 @@
-#' Create a new post
+#' Create a new quarto blog post
 #'
 #' `quartopost()` opens a dialog window to input title and other
 #' desired data to create the file for the blog post.
@@ -11,7 +11,7 @@
 #' - open the file for editing
 #' @export
 #'
-#' @examples
+#' @examplesIf interactive()
 #' quartopost()
 quartopost <-  function() {
 
