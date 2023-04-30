@@ -2,6 +2,8 @@
 # quartopost
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/petzi53/quartopost/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/petzi53/quartopost/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of `quartopost` is to create and open a Quarto blog post in
