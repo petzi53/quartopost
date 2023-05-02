@@ -15,12 +15,16 @@
 #' quartopost()
 quartopost <-  function() {
 
+    verbose = ifelse(is.null(getOption("quartopost.verbose")),
+                     TRUE, getOption("quartopost.verbose"))
+
     params <- get_args()
 
     # check if user canceled
-    if (is.null(params)) {
+    if (is.null(params) & verbose == FALSE)
         return(invisible())
-    }
+    if (is.null(params) & verbose == TRUE)
+        return("User has cancelled")
 
     stopifnot("Your blog post has no title!" =
                   params$title != "")
@@ -34,6 +38,17 @@ quartopost <-  function() {
     image_name <- prepare_image_name(params$image)
     cats <- prepare_categories(params$categories, params$newcat)
     post_yaml <- prepare_yaml(params, description, image_name, cats)
+
+
+    if (verbose) {
+        cat(paste0("New folder inside 'posts':",
+        params$date, "-", title_kebab(params$title), "\n"))
+        cat("YAML front matter:\n")
+        cat(post_yaml)
+
+        create_post <- (yesno::yesno("Create folder and file(s)?"))
+        if (!create_post) return("Post creation canceled")
+    }
 
 
     # create directory and file

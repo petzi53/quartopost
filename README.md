@@ -4,6 +4,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/petzi53/quartopost/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/petzi53/quartopost/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
 ## Goal
@@ -52,5 +53,53 @@ devtools::install_github("petzi53/quartopost")
 ``` r
 library(quartopost)
 
-if (interactive()) quartopost()
+if (interactive()) 
+    quartopost()
 ```
+
+## Possible Configurations
+
+To create Quarto posts even easier, you can configure `quartopost` in
+three ways:
+
+### Provide a shortcut
+
+- Choose “Tools -\> Modify Keyboard Shortcuts …” from the RStudio menu.
+- Filter the search box for “quarto”.
+- Click into the column “Shortcut” of the “Create Quarto Post” addin.
+- Provide your keyboard shortcut.
+
+### Add author name programmatically
+
+If you are the only blog author on your machine, you can add your name
+to the author field automatically.
+
+- Install the `usethis` package. Open `.Rprofile` with
+  `usethis::edit_r_profile()`. After adding the following line into
+  `.Rprofile` restart RStudio
+
+<!-- -->
+
+    options(servr.daemon = TRUE,
+        quartopost.author = "<your name>" 
+    )
+
+### Prevent confirmation question
+
+If you want to prevent the confirmation question before `quartopost()`
+creates the folder with the post (and copies your chosen image), add
+another line into `.Rprofile`:
+
+    options(servr.daemon = TRUE,
+        quartopost.verbose = FALSE 
+    )
+
+If you are going to add both lines to .`RProfile`, then you need to add
+a comma to the first line., e.g.:
+
+    options(servr.daemon = TRUE,
+        quartopost.author = "Peter Baumgartner",
+        quartopost.verbose = FALSE 
+    )
+
+Do not forget to restart RStudio!

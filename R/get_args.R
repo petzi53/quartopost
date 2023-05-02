@@ -7,7 +7,7 @@ get_args <- function() {
                      shiny::fillRow(flex = c(7,4,3),
                         shiny::textInput(
                             inputId = "title",
-                            label = "Title (try to be under 40 characters)",
+                            label = "Title (required)",
                             placeholder = "Name of your blog post",
                         ),
                         shiny::textInput(
@@ -104,6 +104,12 @@ get_args <- function() {
                 "categories", "newcat")
             shiny::stopApp(returnValue)
         })
+
+        # No error message when user presses "Cancel" button
+        shiny::observeEvent(input$cancel, {
+            shiny::stopApp(NULL)
+        })
+
     }
 
     shiny::runGadget(ui, server, viewer =
