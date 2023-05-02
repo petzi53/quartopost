@@ -28,7 +28,7 @@ RStudio.
 the YAML header of a new blog post.
 
 ```{r screenshot, fig.align='center', echo=FALSE, fig.cap='Dialog window for creating a blog post', fig.alt='Dialog windows shows input field for title, author, date and subtitle'}
-knitr::include_graphics("man/figures/README-/shiny-dialog-window.png")
+knitr::include_graphics("man/figures/README-shiny-dialog-window.png")
 ```
 
 After clicking the "Done" button the function generates the core

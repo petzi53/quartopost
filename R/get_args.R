@@ -2,7 +2,10 @@ get_args <- function() {
 
     ui <- miniUI::miniPage(
         miniUI::miniTabstripPanel(
-            miniUI::miniTabPanel("Essentials", icon = shiny::icon("sliders"),
+            miniUI::miniTabPanel(
+                htmltools::tags$span(
+                    fontawesome::fa("circle-exclamation", fill = "steelblue", width = "20px"),
+                    htmltools::tags$p("Essentials")),
                  miniUI::miniContentPanel(
                      shiny::fillRow(flex = c(7,4,3),
                         shiny::textInput(
@@ -33,7 +36,10 @@ get_args <- function() {
                      ),
                  ),
             ),
-            miniUI::miniTabPanel("Categories", icon = shiny::icon("area-chart"),
+            miniUI::miniTabPanel(
+                htmltools::tags$span(
+                    fontawesome::fa("tags", fill = "steelblue", width = "20px"),
+                    htmltools::tags$p("Categories")),
                  miniUI::miniContentPanel(
                      shiny::fillRow(shiny::selectInput(
                          inputId = "categories",
@@ -56,7 +62,10 @@ get_args <- function() {
                 ),
             ),
             # shiny::fillRow(htmltools::hr(), height = '50px'),
-            miniUI::miniTabPanel("Image", icon = shiny::icon("area-chart"),
+            miniUI::miniTabPanel(
+                htmltools::tags$span(
+                    fontawesome::fa("image", fill = "steelblue", width = "20px"),
+                    htmltools::tags$p("Image")),
                  miniUI::miniContentPanel(
                      shiny::fillRow(
                          shiny::fileInput('newimg', 'Image', placeholder =
@@ -73,7 +82,9 @@ get_args <- function() {
             ),
 
 
-            miniUI::miniTabPanel("Description", icon = shiny::icon("table"),
+            miniUI::miniTabPanel(htmltools::tags$span(
+                fontawesome::fa("paragraph", fill = "steelblue", width = "20px"),
+                htmltools::tags$p("Description")),
                  miniUI::miniContentPanel(
                      shiny::fillRow(shiny::textAreaInput(
                          inputId = "description",

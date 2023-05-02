@@ -15,9 +15,11 @@ URL: https://github.com/petzi53/quartopost,
     https://petzi53.github.io/quartopost/
 BugReports: https://github.com/petzi53/quartopost/issues
 Imports: 
+    fontawesome,
     fs,
     glue,
     here,
+    htmltools,
     lubridate,
     miniUI,
     readr,

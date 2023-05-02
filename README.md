@@ -17,7 +17,7 @@ the YAML header of a new blog post.
 
 <div class="figure" style="text-align: center">
 
-<img src="man/figures/README-/shiny-dialog-window.png" alt="Dialog windows shows input field for title, author, date and subtitle" width="50%" />
+<img src="man/figures/README-shiny-dialog-window.png" alt="Dialog windows shows input field for title, author, date and subtitle" width="50%" />
 <p class="caption">
 Dialog window for creating a blog post
 </p>
