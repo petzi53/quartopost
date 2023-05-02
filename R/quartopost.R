@@ -17,6 +17,11 @@ quartopost <-  function() {
 
     params <- get_args()
 
+    # check if user canceled
+    if (is.null(params)) {
+        return(invisible())
+    }
+
     stopifnot("Your blog post has no title!" =
                   params$title != "")
     slug <- paste0("posts/", params$date, "-",
