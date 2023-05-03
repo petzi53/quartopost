@@ -4,9 +4,7 @@ Version: 0.1.0
 Authors@R: 
     person("Peter", "Baumgartner", , "petzi53@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4526-8791"))
-Description: After displaying a dialog window where you can enter
-  data for the YAM header it generates the core skeleton of a 
-  Quarto post.
+Description: Enter data in a dialog window to generate the core skeleton of a Quarto post.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -29,4 +27,4 @@ Imports:
     stringr,
     yesno
 Suggests: 
-    knitr
+    knitr,
