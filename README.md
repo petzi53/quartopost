@@ -9,8 +9,8 @@
 
 ## Goal
 
-The goal of `quartopost` is to create and open a Quarto blog post in
-RStudio.
+To use this package you need to work in RStudio. The goal of
+`quartopost` is to create and open a Quarto blog post with RStudio.
 
 `quartopost()` displays a dialog window where you can enter the data for
 the YAML header of a new blog post.
@@ -103,3 +103,42 @@ a comma to the first line., e.g.:
     )
 
 Do not forget to restart RStudio!
+
+## Acknowledgements
+
+I am not very experienced in R programming, so I am very grateful that I
+could take help and suggestions from different sources:
+
+I started with `quartopost()` after a question or feature request at
+the [Posit
+forum](https://community.rstudio.com/t/template-or-addin-for-new-posts-in-quarto-blog/164735/2).
+I got some helpful links that I tried out and used as precursors for my
+implementation.
+
+I took the [new_post() script from The Mockup
+blog](https://themockup.blog/posts/2022-11-08-use-r-to-generate-a-quarto-blogpost/) as
+an advanced organizer for the general structure of my approach. It has a
+very extensive and understandable explanation. I learned about the kebab
+notation I had never heard about until this blog post. For German
+umlauts – and special characters in other languages -, I added the line
+`stringi::stri_trans_general((title), "latin-ascii")` (learned from
+a [StackOverflow answer](https://stackoverflow.com/a/38171652/7322615)).
+
+I also used some ideas from the [newpost
+package](https://github.com/smach/newpost/), particularly the use of
+RStudio Addins and the request that users choose from categories already
+used.
+
+My knowledge of R programming is limited, but I am a complete newbie
+when it comes to Shiny apps. (I just started reading the fantastic
+[Mastering Shiny book by Hadley Wickham](https://mastering-shiny.org/).)
+I took the general structure of the Shiny window from the blogdown “New
+Post” RStudio addin by Yihui Xie. The lack of a similar function for
+Quarto was generally my main incentive to start with the quartopost
+project in the first place.
+
+I don’t want to release my package to CRAN, but I tried to follow the
+advises of [R Packages](https://r-pkgs.org/). I am sure that my code is
+not efficient and that there are many ways to improve my package. If you
+find bugs or better ways to solve my intended goal please do not
+hesitate to raise an issue or provide a pull request.
