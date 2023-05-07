@@ -1,3 +1,6 @@
+# quartopost 0.2.1
+
+* Resolved bug to find YAML header
 
 # quartopost 0.2.0
 
