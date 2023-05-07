@@ -91,10 +91,14 @@ get_cat <- function() {
     f_list = list()
     cat_vec = NULL
 
+    ############################################################
     # create "posts" folder if it does not exist
+    # creation of folder shouldn't be here,
+    # here I just collect categories
     if (!fs::dir_exists(path = here::here("posts"))) {
         fs::dir_create(path = here::here("posts"))
     }
+    ############################################################
 
     # find all "*.qmd" files under folder "posts"
     fp <- fs::dir_ls(path = here::here("posts"), recurse = TRUE, glob = "*.qmd")
@@ -104,7 +108,7 @@ get_cat <- function() {
     # read file contents into list variable
     for (i in 1:length(fp)) {
         f_list[i] <- readr::read_file(fp[i]) |>
-            stringr::str_extract(stringr::regex("^---[\\s\\S]*^---", multiline = TRUE))
+        stringr::str_extract(stringr::regex("^---[\\s\\S]*^---\\n", multiline = TRUE))
     }
 
     # extract yaml content
