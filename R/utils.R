@@ -108,7 +108,7 @@ get_cat <- function() {
     # read file contents into list variable
     for (i in 1:length(fp)) {
         f_list[i] <- readr::read_file(fp[i]) |>
-        stringr::str_extract(stringr::regex("^---[\\s\\S]*^---\\n", multiline = TRUE))
+        stringr::str_extract(stringr::regex("^---[\\s\\S]*?^---\\n", multiline = TRUE))
     }
 
     # extract yaml content

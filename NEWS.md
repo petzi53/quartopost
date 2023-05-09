@@ -1,3 +1,8 @@
+# quartopost 0.2.2
+
+* Find the first YAML header to prevent that YAML from R code example is taken 
+
+
 # quartopost 0.2.1
 
 * Resolved bug to find YAML header
