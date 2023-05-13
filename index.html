@@ -99,8 +99,9 @@ Dialog window for creating a blog post
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/petzi53/quartopost" class="external-link">quartopost</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> </span>
-<span>    <span class="fu"><a href="reference/quartopost.html">quartopost</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="reference/quartopost.html">quartopost</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="possible-configurations">Possible Configurations<a class="anchor" aria-label="anchor" href="#possible-configurations"></a>
@@ -140,6 +141,11 @@ Dialog window for creating a blog post
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">quartopost.verbose =</span> <span class="cn">FALSE</span> </span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Do not forget to restart RStudio!</p>
+</div>
+<div class="section level3">
+<h3 id="other-configuration-options">Other configuration options<a class="anchor" aria-label="anchor" href="#other-configuration-options"></a>
+</h3>
+<p>You can specify if you want the new post with <code>draft: true</code> (Standard) or <code>draft: false</code>.</p>
 </div>
 </div>
 <div class="section level2">
