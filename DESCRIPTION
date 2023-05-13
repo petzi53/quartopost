@@ -23,6 +23,7 @@ Imports:
     readr,
     rstudioapi,
     shiny,
+    shinyFeedback,
     stringi,
     stringr,
     yesno

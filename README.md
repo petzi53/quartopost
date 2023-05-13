@@ -53,8 +53,9 @@ devtools::install_github("petzi53/quartopost")
 ``` r
 library(quartopost)
 
-if (interactive()) 
-    quartopost()
+if (interactive()) {
+  quartopost()
+}
 ```
 
 ## Possible Configurations
@@ -103,6 +104,11 @@ a comma to the first line., e.g.:
     )
 
 Do not forget to restart RStudio!
+
+### Other configuration options
+
+You can specify if you want the new post with `draft: true` (Standard)
+or `draft: false`.
 
 ## Acknowledgements
 

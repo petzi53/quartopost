@@ -60,8 +60,9 @@ devtools::install_github("petzi53/quartopost")
 ```{r example}
 library(quartopost)
 
-if (interactive()) 
-    quartopost()
+if (interactive()) {
+  quartopost()
+}
 ```
 
 ## Possible Configurations
@@ -115,6 +116,11 @@ options(servr.daemon = TRUE,
 ```
 
 Do not forget to restart RStudio!
+
+### Other configuration options
+
+You can specify if you want the new post with `draft: true` (Standard)
+or `draft: false`.
 
 ## Acknowledgements
 
