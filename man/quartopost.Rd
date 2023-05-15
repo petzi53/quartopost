@@ -13,7 +13,7 @@ Nothing. What matters are the side effects:
 \item create a "index.qmd" file
 \item copy the (optional) image file into the folder
 \item populate the YAML field
-\item open the file for editing
+\item open the new file in RStudio for editing
 }
 }
 \description{

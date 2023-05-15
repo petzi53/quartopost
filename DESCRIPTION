@@ -1,8 +1,8 @@
 Package: quartopost
-Title: Create A Quarto Blog Post
+Title: Create a Quarto Blog Post
 Version: 0.2.2.9000
 Authors@R: 
-    person("Peter", "Baumgartner", , "petzi53@gmail.com", role = c("aut", "cre"),
+    person("Peter", "Baumgartner", , "petzi53@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0003-4526-8791"))
 Description: Enter data in a dialog window to generate the core skeleton of a Quarto post.
 License: MIT + file LICENSE
@@ -13,7 +13,6 @@ URL: https://github.com/petzi53/quartopost,
     https://petzi53.github.io/quartopost/
 BugReports: https://github.com/petzi53/quartopost/issues
 Imports: 
-    fontawesome,
     fs,
     glue,
     here,
@@ -24,8 +23,12 @@ Imports:
     rstudioapi,
     shiny,
     shinyFeedback,
+    shinyfocus,
+    shinyjs,
     stringi,
     stringr,
     yesno
 Suggests: 
     knitr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

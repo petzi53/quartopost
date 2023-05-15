@@ -1,77 +1,62 @@
+jsFocus <- '
+    $(document).on("shiny:connected", function(){
+        $("input#title").focus();
+      });
+    '
+
 get_args <- function() {
   ui <- miniUI::miniPage(
-    miniUI::miniTabstripPanel(
-      miniUI::miniTabPanel(
-        htmltools::tags$span(
-          fontawesome::fa("circle-exclamation", fill = "steelblue", width = "20px"),
-          htmltools::tags$p("Essentials")
-        ),
+    shinyjs::useShinyjs(),
+    shinyFeedback::useShinyFeedback(),
+    shinyfocus::shinyfocus_js_dependency(),
+    htmltools::tags$head(htmltools::tags$script(htmltools::HTML(jsFocus))),
         miniUI::miniContentPanel(
-          shiny::fillRow(
-            flex = c(7, 4, 3),
-            shiny::textInput(
-              inputId = "title",
-              label = "Title (required)",
-              placeholder = "Name of your blog post",
-            ),
-            shiny::textInput(
-              inputId = "author",
-              label = "Author",
-              value = getOption("quartopost.author"),
-              placeholder = "Author of this post",
-            ),
-            shiny::fillRow(shiny::dateInput(
-              inputId = "date",
-              label = "Date",
-              value = lubridate::today(),
-            ), ),
-            height = "70px"
+          shiny::fillRow(height = "100px",
+                flex = c(NA,2,1),
+                shiny::textInput(
+                  inputId = "title",
+                  label = "Title (required)",
+                  placeholder = "Name of your blog post"
+                ),
+                shiny::textInput(
+                  inputId = "author",
+                  label = "Author",
+                  value = getOption("quartopost.author"),
+                  placeholder = "Author of this post"
+                ),
+                shiny::dateInput(
+                  inputId = "date",
+                  label = "Date",
+                  value = lubridate::today(),
+                ),
+
           ),
-          shiny::fillRow(shiny::textInput(
-            inputId = "subtitle",
-            label = "Subtitle",
-            placeholder = "subtitle (optional)",
-            width = "100%"
-          ), ),
-        ),
-      ),
-      miniUI::miniTabPanel(
-        htmltools::tags$span(
-          fontawesome::fa("tags", fill = "steelblue", width = "20px"),
-          htmltools::tags$p("Categories")
-        ),
-        miniUI::miniContentPanel(
-          shiny::fillRow(
-            shiny::selectInput(
+          shiny::fillRow(height = "70px",
+            shiny::textInput(
+                inputId = "subtitle",
+                label = "Subtitle",
+                placeholder = "subtitle (optional)",
+                width = "100%",
+            ),
+          ),
+          htmltools::hr(),
+          shiny::fillRow(height = "70px",
+          shiny::selectInput(
               inputId = "categories",
               label = "Categories",
+              multiple = TRUE,
               choices = c(
                 "Choose one of the categories already used" = "",
                 stringr::str_sort(get_cat())
               ),
-              multiple = TRUE,
-              width = "70%"
-            ),
-            height = "100px"
           ),
-          shiny::fillRow(
             shiny::textInput(
               inputId = "newcat",
-              label = "Create a new category",
-              placeholder = "Add new categories separated with a comma",
-              width = "100%"
+              label = "Add categories, separated with comma",
+              placeholder = "cat1, cat2, cat3"
             ),
-            height = "70px"
           ),
-        ),
-      ),
-      # shiny::fillRow(htmltools::hr(), height = '50px'),
-      miniUI::miniTabPanel(
-        htmltools::tags$span(
-          fontawesome::fa("image", fill = "steelblue", width = "20px"),
-          htmltools::tags$p("Image")
-        ),
-        miniUI::miniContentPanel(
+          htmltools::hr(),
           shiny::fillRow(
             shiny::fileInput("newimg", "Image",
               placeholder =
@@ -87,14 +72,7 @@ get_args <- function() {
             ),
             height = "70px"
           ),
-        ),
-      ),
-      miniUI::miniTabPanel(
-        htmltools::tags$span(
-          fontawesome::fa("paragraph", fill = "steelblue", width = "20px"),
-          htmltools::tags$p("Description")
-        ),
-        miniUI::miniContentPanel(
+          htmltools::hr(),
           shiny::fillRow(
             shiny::textAreaInput(
               inputId = "description",
@@ -105,24 +83,51 @@ get_args <- function() {
               rows = 8
             ),
             height = "70px"
-          )
-        )
-      )
+          ),
     ),
-    miniUI::gadgetTitleBar("Enter the YAML fields for your post")
+    miniUI::gadgetTitleBar("Enter the YAML fields for your post"),
   )
 
+
   server <- function(input, output, session) {
+
+    # Check if title is OK
+
+    title_ok <- shiny::reactive({
+        shinyFeedback::hideFeedback("title")
+        if (title_empty <- (is.null(input$title) || input$title == "")) {
+            shinyFeedback::feedbackWarning("title", show = TRUE, "Enter a title or click the 'Cancel' button")
+            shiny::req(!title_empty)
+        } else {
+            slug <- paste0(
+                "posts/", input$date, "-",
+                title_kebab(input$title)
+            )
+            new_post_file <- paste0(slug, "/", "index.qmd")
+            if (title_exists <- file.exists(new_post_file)) {
+                shinyFeedback::feedbackDanger("title", show = TRUE, "File already exists, rename it")
+                shiny::req(!title_exists)
+            }
+            shinyFeedback::feedbackSuccess("title", show = TRUE, "Valid file name")
+            return(list(title = input$title, slug = slug, filename = new_post_file))
+        }
+    })
+
+    shinyfocus::on_blur(
+        "title",
+        title_ok()
+    )
+
     # When the Done button is clicked, return a value
     shiny::observeEvent(input$done, {
       returnValue <- list(
-        input$title, input$author,
+        title_ok(), input$author,
         input$date, input$newimg, input$alt,
         input$subtitle, input$description,
         input$categories, input$newcat
       )
       names(returnValue) <- c(
-        "title", "author", "date",
+        "file_data", "author", "date",
         "image", "alt", "subtitle", "description",
         "categories", "newcat"
       )
@@ -137,6 +142,6 @@ get_args <- function() {
 
   shiny::runGadget(ui, server,
     viewer =
-      shiny::dialogViewer("Quarto Blog Post Fields", width = 650, height = 350)
+      shiny::dialogViewer("Quarto Blog Post Fields", width = 650, height = 800)
   )
 }

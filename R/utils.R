@@ -47,7 +47,7 @@ prepare_categories <- function(cat, new) {
 prepare_yaml <- function(args, desc, img_name, cats, draft) {
   paste(c(
     "---",
-    glue::glue('title: "{args$title}"'),
+    glue::glue('title: "{args$file_data$title}"'),
     glue::glue('subtitle: "{args$subtitle}"'),
     glue::glue("{desc}"),
     glue::glue('author: "{args$author}"'),

@@ -10,7 +10,8 @@
 ## Goal
 
 To use this package you need to work in RStudio. The goal of
-`quartopost` is to create and open a Quarto blog post with RStudio.
+`quartopost` is to create and open a Quarto blog post with the
+appropriate YAML front matter in RStudio.
 
 `quartopost()` displays a dialog window where you can enter the data for
 the YAML header of a new blog post.
@@ -29,14 +30,15 @@ skeleton of a Quarto post. This includes:
 
 - creating the directory (named with the date and title in kebab
   notation)
-- (optionally) copying images from your hard disk into this new folder
+- (optionally) copying images from your hard disk into the new created
+  folder
 - creating the `index.qmd` file with the YAML header populated from the
   data of the dialog window
 - opening the blog post file in RStudio for editing.
 
 You can choose from your categories already created or add new
 categories. With the package comes also an RStudio Addin so you can bind
-the `quartopost()` with a shortcut.
+the `quartopost()` command with a shortcut.
 
 ## Installation
 
@@ -60,8 +62,7 @@ if (interactive()) {
 
 ## Possible Configurations
 
-To create Quarto posts even easier, you can configure `quartopost` in
-three ways:
+To create Quarto posts even easier, you can configure `quartopost`:
 
 ### Provide a shortcut
 
@@ -75,9 +76,9 @@ three ways:
 If you are the only blog author on your machine, you can add your name
 to the author field automatically.
 
-- Install the `usethis` package. Open `.Rprofile` with
-  `usethis::edit_r_profile()`. After adding the following line into
-  `.Rprofile` restart RStudio
+- Open `.Rprofile`. The easiest way it to install `usethis`\` and open
+  `.Rprofile` with `usethis::edit_r_profile()`.
+- Add the following line into `.Rprofile`
 
 <!-- -->
 
@@ -85,30 +86,33 @@ to the author field automatically.
         quartopost.author = "<your name>" 
     )
 
-### Prevent confirmation question
+- Restart RStudio.
+
+### Prevent confirmation question and verbose output
 
 If you want to prevent the confirmation question before `quartopost()`
-creates the folder with the post (and copies your chosen image), add
-another line into `.Rprofile`:
+creates the folder with the post, the YAML header and (optionally)
+copies your chosen image, add another line into `.Rprofile`:
 
-    options(servr.daemon = TRUE,
-        quartopost.verbose = FALSE 
-    )
+    quartopost.verbose = FALSE 
 
-If you are going to add both lines to .`RProfile`, then you need to add
-a comma to the first line., e.g.:
-
-    options(servr.daemon = TRUE,
-        quartopost.author = "Peter Baumgartner",
-        quartopost.verbose = FALSE 
-    )
-
-Do not forget to restart RStudio!
-
-### Other configuration options
+### Define the draft status of the created file
 
 You can specify if you want the new post with `draft: true` (Standard)
 or `draft: false`.
+
+### Summary
+
+If you are going to add all lines to .`RProfile`, then your code
+snippets should look like:
+
+    options(servr.daemon = TRUE,
+        quartopost.author = "Peter Baumgartner", # default = ""
+        quartopost.verbose = FALSE,              # default = TRUE
+        quartopost.draft = FALSE                 # default = TRUE
+    )
+
+Do not forget to restart RStudio after you changed `.Rprofile`!
 
 ## Acknowledgements
 
@@ -144,7 +148,12 @@ Quarto was generally my main incentive to start with the quartopost
 project in the first place.
 
 I don’t want to release my package to CRAN, but I tried to follow the
-advises of [R Packages](https://r-pkgs.org/). I am sure that my code is
-not efficient and that there are many ways to improve my package. If you
-find bugs or better ways to solve my intended goal please do not
-hesitate to raise an issue or provide a pull request.
+advises of [R Packages](https://r-pkgs.org/).
+
+## Contribution is welcome!
+
+I am sure that my code is not efficient and that there are many ways to
+improve my package. I am very interested to learn better programming in
+R / Shiny / (JavaScript). If you find bugs or more efficient ways to
+solve my intended goal please do not hesitate to raise an issue or
+provide a pull request.
