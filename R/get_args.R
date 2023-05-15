@@ -6,10 +6,8 @@ jsFocus <- '
 
 get_args <- function() {
   ui <- miniUI::miniPage(
-    shinyjs::useShinyjs(),
-    shinyFeedback::useShinyFeedback(),
-    shinyfocus::shinyfocus_js_dependency(),
     htmltools::tags$head(htmltools::tags$script(htmltools::HTML(jsFocus))),
+    shinyFeedback::useShinyFeedback(),
         miniUI::miniContentPanel(
           shiny::fillRow(height = "100px",
                 flex = c(NA,2,1),
@@ -91,8 +89,7 @@ get_args <- function() {
 
   server <- function(input, output, session) {
 
-    # Check if title is OK
-
+    # Check status of title and return feedback message
     title_ok <- shiny::reactive({
         shinyFeedback::hideFeedback("title")
         if (title_empty <- (is.null(input$title) || input$title == "")) {
@@ -113,9 +110,11 @@ get_args <- function() {
         }
     })
 
-    shinyfocus::on_blur(
-        "title",
-        title_ok()
+    # observe title field for feedback messages
+    shiny::observeEvent(
+        eventExpr = input$title,
+        handlerExpr = title_ok(),
+        ignoreInit = TRUE
     )
 
     # When the Done button is clicked, return a value

@@ -125,3 +125,5 @@ get_cat <- function() {
   }
   return(unique(cat_vec))
 }
+
+

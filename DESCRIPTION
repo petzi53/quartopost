@@ -23,8 +23,6 @@ Imports:
     rstudioapi,
     shiny,
     shinyFeedback,
-    shinyfocus,
-    shinyjs,
     stringi,
     stringr,
     yesno
