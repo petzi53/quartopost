@@ -1,4 +1,9 @@
-# quartopost (development version)
+# quartopost 0.3.0
+
+    - New UI: Bigger window holds all fields in one tab
+    - Added proof if title is valid inside the window
+    - Print status of title input field after loosing focus
+    - Added configuration for draft post status
 
 # quartopost 0.2.2
 
