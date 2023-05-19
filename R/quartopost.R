@@ -29,6 +29,10 @@ quartopost <- function() {
   draft <- ifelse(is.null(getOption("quartopost.draft")),
                     TRUE, getOption("quartopost.draft")
   )
+
+  show_empty_fields <- ifelse(is.null(getOption("quartopost.show_empty_fields")),
+                           TRUE, getOption("quartopost.show_empty_fields")
+  )
   ##############################################################
 
   # call the dialog window
@@ -46,7 +50,8 @@ quartopost <- function() {
   description <- prepare_description(params$description)
   image_name <- prepare_image_name(params$image)
   cats <- prepare_categories(params$categories, params$newcat)
-  post_yaml <- prepare_yaml(params, description, image_name, cats, draft)
+  post_yaml <- prepare_yaml(params, description, image_name,
+                            cats, draft, show_empty_fields)
 
   # display results in console
   if (verbose) {

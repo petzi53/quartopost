@@ -1,61 +1,93 @@
+
+# javascript: set cursor into title field <-  focus title field
 jsFocus <- '
     $(document).on("shiny:connected", function(){
         $("input#title").focus();
       });
     '
 
+# display dialog window to fill data for creating Quarto post
 get_args <- function() {
-  ui <- miniUI::miniPage(
-    htmltools::tags$head(htmltools::tags$script(htmltools::HTML(jsFocus))),
-    shinyFeedback::useShinyFeedback(),
-        miniUI::miniContentPanel(
-          shiny::fillRow(height = "100px",
-                flex = c(NA,2,1),
-                shiny::textInput(
-                  inputId = "title",
-                  label = "Title (required)",
-                  placeholder = "Name of your blog post"
-                ),
-                shiny::textInput(
-                  inputId = "author",
-                  label = "Author",
-                  value = getOption("quartopost.author"),
-                  placeholder = "Author of this post"
-                ),
-                shiny::dateInput(
-                  inputId = "date",
-                  label = "Date",
-                  value = lubridate::today(),
-                ),
 
-          ),
-          shiny::fillRow(height = "70px",
+  # start mini page
+  ui <- miniUI::miniPage(
+    # put javascript into html header
+    htmltools::tags$head(htmltools::tags$script(htmltools::HTML(jsFocus))),
+
+    # initialize shinyFeedback
+    shinyFeedback::useShinyFeedback(),
+
+    # start with panel
+    miniUI::miniContentPanel(
+
+      # first panel part: title, author, date, subtitle
+      shiny::fillRow(height = "100px",
+            flex = c(NA,2,1),
             shiny::textInput(
-                inputId = "subtitle",
-                label = "Subtitle",
-                placeholder = "subtitle (optional)",
-                width = "100%",
+              inputId = "title",
+              label = "Title (required)",
+              placeholder = "Name of your blog post"
             ),
-          ),
-          htmltools::hr(),
-          shiny::fillRow(height = "70px",
-          shiny::selectInput(
-              inputId = "categories",
-              label = "Categories",
-              multiple = TRUE,
-              choices = c(
-                "Choose one of the categories already used" = "",
-                stringr::str_sort(get_cat())
-              ),
-          ),
             shiny::textInput(
-              inputId = "newcat",
-              label = "Add categories, separated with comma",
-              placeholder = "cat1, cat2, cat3"
+              inputId = "author",
+              label = "Author",
+              value = getOption("quartopost.author"),
+              placeholder = "Author of this post"
             ),
-          ),
+            shiny::dateInput(
+              inputId = "date",
+              label = "Date",
+              value = lubridate::today(),
+            ),
+
+      ),
+
+      # subtitle
+      shiny::fillRow(height = "70px",
+        shiny::textInput(
+            inputId = "subtitle",
+            label = "Subtitle",
+            placeholder = "subtitle (optional)",
+            width = "100%",
+        ),
+      ),
+      htmltools::hr(),
+############ end of title, author, date, subtitle ##############
+
+          # start panel part for categories
+          # don't display selectInput if there are no categories
+          if (!is.null(my_cats <- get_cat())) {
+              shiny::fillRow(height = "70px",
+                  shiny::selectInput(
+                      inputId = "categories",
+                      label = "Categories",
+                      multiple = TRUE,
+                      choices = c(
+                        "Choose one of the categories already used" = "",
+                        stringr::str_sort(get_cat())
+                      ),
+                  ),
+                  shiny::textInput(
+                      inputId = "newcat",
+                      label = "Add categories, separated with comma",
+                      placeholder = "cat1, cat2, cat3"
+                  ),
+              )
+         } else {
+             shiny::fillRow(height = "70px",
+                shiny::textInput(
+                    inputId = "newcat",
+                    label = "No categories available. Add your first categories, separated with comma",
+                    placeholder = "cat1, cat2, cat3",
+                    width = "100%"
+                ),
+             )
+         },
           htmltools::hr(),
-          shiny::fillRow(
+################     end of categories   #######################
+
+            # start panel for image upload
+            shiny::fillRow(
             shiny::fileInput("newimg", "Image",
               placeholder =
                 "Select external image", accept = "image/*"
@@ -71,6 +103,9 @@ get_args <- function() {
             height = "70px"
           ),
           htmltools::hr(),
+####################     end of images    ######################
+
+          # start panel for description
           shiny::fillRow(
             shiny::textAreaInput(
               inputId = "description",
@@ -82,9 +117,12 @@ get_args <- function() {
             ),
             height = "70px"
           ),
-    ),
+##############   end of description ###########################
+    ), # end of mini content panel
+
     miniUI::gadgetTitleBar("Enter the YAML fields for your post"),
-  )
+
+  ) # end of mini page
 
 
   server <- function(input, output, session) {

@@ -1,9 +1,11 @@
 # quartopost 0.3.0
 
-    - New UI: Bigger window holds all fields in one tab
-    - Added proof if title is valid inside the window
-    - Print status of title input field after loosing focus
-    - Added configuration for draft post status
+* New UI: Bigger window holds all fields in one tab
+* Add proof if title is valid inside the dialog window.
+* Provide feedback of status of title field after loosing focus
+* Remove failed file creation if title is not valid (not needed anymore)
+* Add configuration for draft post status
+* Add configuration to show or hide empty fields
 
 # quartopost 0.2.2
 

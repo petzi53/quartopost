@@ -101,6 +101,14 @@ copies your chosen image, add another line into `.Rprofile`:
 You can specify if you want the new post with `draft: true` (Standard)
 or `draft: false`.
 
+### Show or hide empty fields
+
+Not all fields are always needed. The default is to get the full list of
+all YAML fields provided by the dialog window, even if some of the
+fields are empty (`show_empty_fields = true`). With
+`show_empty_fields = false` only those fields with contents are
+displayed in the YAML front matter.
+
 ### Summary
 
 If you are going to add all lines to .`RProfile`, then your code
@@ -109,7 +117,8 @@ snippets should look like:
     options(servr.daemon = TRUE,
         quartopost.author = "Peter Baumgartner", # default = ""
         quartopost.verbose = FALSE,              # default = TRUE
-        quartopost.draft = FALSE                 # default = TRUE
+        quartopost.draft = FALSE,                # default = TRUE
+        quartopost.show_empty_fields = FALSE     # default = TRUE 
     )
 
 Do not forget to restart RStudio after you changed `.Rprofile`!

@@ -44,25 +44,53 @@ prepare_categories <- function(cat, new) {
 
 
 # build YAML
-prepare_yaml <- function(args, desc, img_name, cats, draft) {
-  paste(c(
-    "---",
-    glue::glue('title: "{args$file_data$title}"'),
-    glue::glue('subtitle: "{args$subtitle}"'),
-    glue::glue("{desc}"),
-    glue::glue('author: "{args$author}"'),
-    glue::glue('date: "{args$date}"'),
-    glue::glue('image: "{img_name}"'),
-    glue::glue('image-alt: "{args$alt}"'),
-    glue::glue("categories: [{cats}]"),
-    # date-modified starts always with date choice
-    glue::glue('date-modified: "{args$date}"'),
-    glue::glue("draft: {draft}"),
-    "---\n"
-  ), collapse = "\n")
+prepare_yaml <- function(args, desc,
+                         img_name, cats, draft, fields) {
+  # if show_empty_fields == TRUE
+  if (fields) {
+      paste(c(
+        "---",
+        glue::glue('title: "{args$file_data$title}"'),
+        glue::glue('subtitle: "{args$subtitle}"'),
+        glue::glue("{desc}"),
+        glue::glue('author: "{args$author}"'),
+        glue::glue('date: "{args$date}"'),
+        glue::glue('image: "{img_name}"'),
+        glue::glue('image-alt: "{args$alt}"'),
+        glue::glue("categories: [{cats}]"),
+        # date-modified starts always with date choice
+        glue::glue('date-modified: "{args$date}"'),
+        glue::glue("draft: {draft}"),
+        "---\n"
+      ), collapse = "\n")
+    # if show_empty_fields == FALSE
+  } else {
+      paste(c(
+          "---",
+          glue::glue('title: "{args$file_data$title}"'),
+          if (args$subtitle != "") {
+            glue::glue('subtitle: "{args$subtitle}"')},
+          if (args$desc != "") {
+            glue::glue("{desc}")},
+          glue::glue('author: "{args$author}"'),
+          glue::glue('date: "{args$date}"'),
+          if (img_name != "") {
+            glue::glue('image: "{img_name}"')
+            glue::glue('image-alt: "{args$alt}"')},
+          if (cats != "") {
+            glue::glue("categories: [{cats}]")},
+          # date-modified starts always with date choice
+          if (args$date) {
+            glue::glue('date-modified: "{args$date}"')},
+          glue::glue("draft: {draft}"),
+          "---\n"
+      ), collapse = "\n")
+
+  }
+
 }
 
-# extract categories form yaml with square brackets
+# extract categories from yaml with square brackets
 # look for "categories:" AND followed by zero or more white-space characters AND
 # "[" AND followed by zero or more character class of white-space and nonwhite characters AND
 # finally followed by the closing bracket "]"
@@ -91,14 +119,12 @@ get_cat <- function() {
   f_list <- list()
   cat_vec <- NULL
 
-  ############################################################
-  # create "posts" folder if it does not exist
-  # creation of folder shouldn't be here,
-  # here I just collect categories
+  # if no "posts" folder exists
+  # there are no categories
   if (!fs::dir_exists(path = here::here("posts"))) {
-    fs::dir_create(path = here::here("posts"))
+    return(cat_vec)
+    # fs::dir_create(path = here::here("posts"))
   }
-  ############################################################
 
   # find all "*.qmd" files under folder "posts"
   fp <- fs::dir_ls(path = here::here("posts"), recurse = TRUE, glob = "*.qmd")
@@ -119,7 +145,7 @@ get_cat <- function() {
       if (stringr::str_detect(f_list[[i]], "categories:\\s*\\[")) { # bracket notation
         cat_vec <- c(cat_vec, extract_cat_brackets(f_list[[i]]))
       } else {
-        cat_vec <- c(cat_vec, extract_cat_dashes(f_list[[i]]))
+        cat_vec <- c(cat_vec, extract_cat_dashes(f_list[[i]]))  # dash notation
       }
     }
   }
