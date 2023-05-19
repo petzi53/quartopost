@@ -7,3 +7,4 @@
 ^pkgdown$
 ^\.github$
 ^my_archive$
+^cran-comments\.md$
