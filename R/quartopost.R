@@ -87,7 +87,7 @@ quartopost <- function() {
 
   # open new post with YAML header in RStudio
   rstudioapi::documentOpen(params$file_data$filename,
-    line = (length(post_yaml) + 1)
+    line = (stringr::str_count(post_yaml, '\n') + 1)
   )
   invisible() # prevent console output
 }
