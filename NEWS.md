@@ -6,6 +6,7 @@
 * Remove failed file creation if title is not valid (not needed anymore)
 * Add configuration for draft post status
 * Add configuration to show or hide empty fields
+* Resolve bug: Put cursor at the end of the YAML front matter.
 
 # quartopost 0.2.2
 
