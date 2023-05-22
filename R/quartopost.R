@@ -15,10 +15,10 @@
 #' quartopost()
 #'
 quartopost <- function() {
-  # # check if it is a Quarto website and stop if not
-  # f <- readr::read_file("_quarto.yml")
-  # type_website <- stringr::str_extract(f, "type: website") == "type: website"
-  # if (is.na(type_website)) stop("This is not a Quarto website!")
+  # check if it is a Quarto website and stop if not
+  f <- readr::read_file("_quarto.yml")
+  type_website <- stringr::str_extract(f, "type: website") == "type: website"
+  if (is.na(type_website)) stop("This is not a Quarto website!")
 
   ############ Get options from .Rprofile ######################
   # display YAML header in console before creating folder and file?
